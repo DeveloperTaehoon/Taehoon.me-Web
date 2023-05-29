@@ -4,13 +4,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <title>Taehoon Net</title>
+  <title>Taehoon</title>
   <link href="style.css" rel="stylesheet" type="text/css" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic&amp;display=swap">
   <link rel="stylesheet" href="static/fonts/font-awesome.min.css">
   <link rel="stylesheet" href="static/berg.css">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+  <script src="main.js"></script>
 </head>
 
   <body>
@@ -18,7 +19,7 @@
 <!--Nav Bar Start-->
   <nav class="navbar navbar-expand-lg bg-light">
   <div class="container-fluid">
-    <a class="navbar-brand" href="index.html">Taehoon</a>
+    <a class="navbar-brand" href="https://taehoon.me/index.html">Taehoon</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -30,10 +31,14 @@
         <li class="nav-item">
           <a class="nav-link" href="https://blog.taehoon.me">Blog&nbsp;</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="Social.html">Social Media&nbsp;</a>
           <li class="nav-item">
           <a class="nav-link" href="https://labs.taehoon.me">Labs&nbsp;</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://labs.taehoon.me/musicsync.html">Music Sync&nbsp;</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://taehoon.me/tweets.html">Live Tweets&nbsp;</a>
         </li>
         </li>
       </ul>
@@ -41,45 +46,143 @@
   </div>
 </nav>
   <!--Nav Bar End-->
-    
-    <p>업데이트 정보</p>
-    v.0.5.0)
-    2023-03-
-    - Github 링크 추가
-    - 더 직관적인 UI로 업데이트
-    v.0.4.2)<br>
-    2023-03-19
-    - labs.taehoon.me 메인 페이지의 프로젝트 리스트가 겹치는 오류 해결 
-    v.0.4.1)<br>
-    2023-03-19
-    - link to bio의 instagram 화면이 모바일에서 너무 커지는 오류 해결
-    - labs.taehoon.me 메인 페이지 프로젝트 리스트 추가
-    - taehoon.me 메인 페이지 코드 최적화
-    v.0.4.0)<br>
-    2023-03-
-    - 메인페이지 link to bio 서비스 오픈
-    - Twitter 링크 추가
-    - Instagram 링크 추가
-    - Spotify 링크 추가
-    - css적용
-    - iframe 적용
-    - 소셜미디어 탭 삭제
-    v.0.3.0)<br>
-    2023-01-09
-    - 모듈이 반응하지 않는 오류 해결.<br>
-    - labs.taehoon.me 서브도메인 추가<br>
-    v.0.2.0)<br>
-    2022-12-16 or 23
-    - 모바일, 태블릿 브라우저 호환 문제 해결<br>
-    - blog.taehoon.me 서브도메인 추가<br>
-    - about.taehooon.me 서브도메인 추가<br>
-    - 소셜미디어 탭 추가<br>
-    - 
-    v.0.1.0)<br>
-    2022-12
-    - 사이트 접속이 불안정한 문제 해결<br>
-    
-    <p>오류문의</p>
+
+
+  <main class="main">
+    <div class="contant">
+
+      <!--
+      <div class="box">
+        <div class="card">
+          <a href="http://whos.amung.us/stats/oaye7i53q6/">
+    <img src="http://whos.amung.us/swidget/oaye7i53q6.png" width="80" height="15"
+    border="0" title="Click to see how many people are online" />
+</a>
+</span>
+          <script id="_wauhsq">var _wau = _wau || []; _wau.push(["small", "oaye7i53q6", "hsq"]);</script><script async src="//waust.at/s.js"></script>
+        </div>
+      </div>
+      -->
+
+      <div class="box">
+        <div class="card text-center">
+          <p><strong><h5>(Beta)<br>          
+          <script>
+          expireDate = new Date  
+expireDate.setMonth(expireDate.getMonth()+1)
+            
+visitor = eval(cookieVal("pageHit"))  /// 방문 카운트 변수이며 cookieVal 함수를 실행시킵니다.
+document.cookie = "pageHit="+visitor+";expires=" + expireDate.toGMTString() /// 이곳에서 쿠키를 갱신합니다.   
+function cookieVal(cookieName) {  /// cookieVal 함수를 선언합니다.   
+   thisCookie = document.cookie.split("; ")  /// 쿠키의 문자열 구조가 '쿠키명=쿠키값; expires=유효기간' 이기 때문에 먼저 세미콜론(;)으로 나눕니다.(split) 
+   for (i=0; i<thisCookie.length; i++) { /// ; 으로 나눈 만큼 반복문을 실행합니다. 여기서는 2번을 반복합니다.   
+        if (cookieName == thisCookie[i].split("=")[0]) {  /// 먼저 thisCookie[i].split("=")[0]은 '쿠키명=쿠키값' 구조에서 =으로 나눈 배열의 첫번째 값을 지칭합니다. 즉, 쿠키명이 되겠습니다. 
+             return thisCookie[i].split("=")[1]  /// thisCookie[i].split("=")[1] 은 =으로 나눈 배열의 두번째 값, 즉, 쿠키값이 됩니다. 
+       }   
+ }   
+ return 0   
+}
+            document.write("홈페이지 1개월간 방문자 수: "+ visitor)
+</script> 
+
+        <script>
+          // 방문자 수를 저장할 변수 선언
+          var visitorCounter = 0;
+
+          function countVisitors() {
+  visitorCounter++;
+}
+
+// 페이지가 로드될 때마다 방문자 수를 1 증가
+          window.onload = countVisitors()
+          
+          //document.write("홈페이지 1개월간 방문자 수:"+ visitorCounter)
+        </script>
+        </h5></strong></p>
+        </div>
+      </div>
+  
+      <div class="box">
+        <div class="card">
+          <p><strong><h4>업데이트 정보</h4></strong></p>
+          
+          <br>[v.0.7.0]<br>
+          2023-05-29<br>
+          - 방문자 수 표시 기능 오픈<br>
+          - About 페이지 UI 업데이트<br>
+          - Navbar 항목 업데이트<br>
+          - Music Sync 탭 추가
+          - Live Tweets 탭 추가<br>
+          - Live Tweets 기능 오픈<br>
+          - Ask 탭 삭제<br>
+          - Bots 탭 삭제<br>
+          
+          <br>[v.0.6.2]<br>
+          2023-04-17<br>
+          - About 페이지 오류 수정<br>
+          - About 페이지 UI 업데이트<br>
+        
+          <br>[v.0.6.1]<br>
+          2023-04-12<br>
+          - Footer Bar 두 줄로 변경<br>
+          - Brand 폰트 굵기 추가<br>
+          - 버튼 색상 수정<br>
+      
+          <br>[v.0.6.0]<br>
+          2023-04-11<br>
+          - 메인페이지 Link to bio 타이틀 고유 색상 추가<br>
+          - Navbar 항목 업데이트<br>
+          - Ask 탭 추가<br>
+          - Bots 탭 추가<br>
+          - Footer Bar에 연락 Email추가<br>
+          - Stats.fm 링크 추가<br>
+          - Facebook 링크 추가<br>
+      
+          <br>[v.0.5.0]<br>
+          2023-03-19<br>
+          - Github 링크 추가<br>
+          - 더 직관적인 UI로 업데이트<br>
+      
+          <br>[v.0.4.2]<br>
+          2023-03-19<br>
+          - labs.taehoon.me 메인 페이지의 프로젝트 리스트가 겹치는 오류 해결<br>
+      
+          <br>[v.0.4.1]<br>
+          2023-03-19<br>
+          - Link to bio instagram 항목의 모바일뷰 오류 해결<br>
+          - labs.taehoon.me 메인 페이지 프로젝트 리스트 추가<br> 
+          - taehoon.me 메인 페이지 코드 최적화<br>
+      
+          <br>[v.0.4.0]<br>
+          2023-03-15<br>
+          - 메인페이지 Link to bio 서비스 오픈<br>
+          - Twitter 링크 추가<br>
+          - Instagram 링크 추가<br>
+          - Spotify 링크 추가<br>
+          - CSS 적용<br>
+          - iframe 적용<br>
+          - 소셜미디어 탭 삭제<br>
+      
+          <br>[v.0.3.0]<br>
+          2023-01-09<br>
+          - 모듈이 반응하지 않는 오류 해결<br>
+          - labs.taehoon.me 서브도메인 추가<br>
+      
+          <br>[v.0.2.0]<br>
+          2022-12-23<br>
+          - 사이트 접속이 불안정한 문제 해결<br>    
+          - Navbar의 모바일, 태블릿 브라우저 호환 문제 해결<br>
+          - blog.taehoon.me 서브도메인 추가<br>
+          - about.taehooon.me 서브도메인 추가<br>
+          - 소셜미디어 탭 추가<br>
+      
+          <br>[v.0.1.0]<br>
+          2022-12-16<br>
+          - taehon.me 웹사이트 오픈<br>
+        </div>
+      </div>
+    </div>
+  </main>
     
 
   <!--Footer Start-->
@@ -87,12 +190,14 @@
   <footer class="footer text-center">
     <div class="container" style="clear: both;>
       <p class="text-muted mb-0 small">
+        Email <a href="mailto:taehoon@taehoon.me">taehoon@taehoon.me</a><br>
         created by
-        <a href="https://taehoon.me/social.html">Taehoon</a>
+        <a href="https://twitter.com/hun0_4">Taehoon</a>
         |
         <a href="https://about.taehoon.me">About</a>
         |
-        v.0.5.0(Beta)
+        v.0.7.0(Beta)
+        
       </p>
     </div>
   </footer>
