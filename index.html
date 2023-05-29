@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html>
 
 <head>
@@ -12,6 +12,23 @@
   <link rel="stylesheet" href="static/berg.css">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
   <link href="style.css" rel="stylesheet" type="text/css">
+  <script>
+      expireDate = new Date  
+expireDate.setMonth(expireDate.getMonth()+1)
+            
+visitor = eval(cookieVal("pageHit"))  /// 방문 카운트 변수이며 cookieVal 함수를 실행시킵니다.   /// 방문 카운트를 1 높입니다. 
+    visitor++
+document.cookie = "pageHit="+visitor+";expires=" + expireDate.toGMTString() /// 이곳에서 쿠키를 갱신합니다.   
+function cookieVal(cookieName) {  /// cookieVal 함수를 선언합니다.   
+   thisCookie = document.cookie.split("; ")  /// 쿠키의 문자열 구조가 '쿠키명=쿠키값; expires=유효기간' 이기 때문에 먼저 세미콜론(;)으로 나눕니다.(split) 
+   for (i=0; i<thisCookie.length; i++) { /// ; 으로 나눈 만큼 반복문을 실행합니다. 여기서는 2번을 반복합니다.   
+        if (cookieName == thisCookie[i].split("=")[0]) {  /// 먼저 thisCookie[i].split("=")[0]은 '쿠키명=쿠키값' 구조에서 =으로 나눈 배열의 첫번째 값을 지칭합니다. 즉, 쿠키명이 되겠습니다. 
+             return thisCookie[i].split("=")[1]  /// thisCookie[i].split("=")[1] 은 =으로 나눈 배열의 두번째 값, 즉, 쿠키값이 됩니다. 
+       }   
+ }   
+ return 0   
+}
+  </script>
 </head>
 
 <body>
@@ -34,6 +51,12 @@
           <li class="nav-item">
           <a class="nav-link" href="https://labs.taehoon.me">Labs&nbsp;</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://labs.taehoon.me/musicsync.html">Music Sync&nbsp;</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://taehoon.me/tweets.html">Live Tweets&nbsp;</a>
+        </li>
         </li>
       </ul>
     </div>
@@ -46,26 +69,38 @@
       
       <div class="box">
         <div class="card">
-          <div class="title">Twitter<div style="float:right;"><a class="btn btn-outline-info" href="https://twitter.com/hun0_4">Twitter Link</a></div></div>
+          <div class="title" style="color:#1DA1F2;">Twitter<div style="float:right;"><a class="btn btn-outline-info" href="https://twitter.com/hun0_4">Twitter Link</a></div></div>
           <div class="detail">
-          <blockquote class="twitter-tweet"><p lang="ko" dir="ltr"><a href="https://t.co/tC77DEjk4z">https://t.co/tC77DEjk4z</a> 도메인 구입 완료. 여기에 여행 블로그같은것들 올리려고 <a href="https://t.co/4piaqwHdnp">pic.twitter.com/4piaqwHdnp</a></p>&mdash; 김태훈 (@hun0_4) <a href="https://twitter.com/hun0_4/status/1600111480967352320?ref_src=twsrc%5Etfw">December 6, 2022</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+          <blockquote class="twitter-tweet"><p lang="en" dir="ltr">I just installed <a href="https://twitter.com/hashtag/WordPress?src=hash&amp;ref_src=twsrc%5Etfw">#WordPress</a> on <a href="https://t.co/BLtCVU1nOo">https://t.co/BLtCVU1nOo</a> via <a href="https://twitter.com/hashtag/Softaculous?src=hash&amp;ref_src=twsrc%5Etfw">#Softaculous</a> <a href="https://twitter.com/hashtag/PHP?src=hash&amp;ref_src=twsrc%5Etfw">#PHP</a></p>&mdash; フン (@hun0_4) <a href="https://twitter.com/hun0_4/status/1603757185669832704?ref_src=twsrc%5Etfw">December 16, 2022</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
           </div>
         </div>
       </div>
       
       <div class="box">
         <div class="card">
-          <div class="title">instagram<div style="float:right;"><a class="btn btn-outline-danger" href="https://instagram.com/hun_0_4">Instagram Link</a></div></div>
+          <div class="title" style="color:#E4405F">Instagram<div style="float:right;"><a class="btn btn-outline-danger" href="https://instagram.com/hun_0_4">Instagram Link</a></div></div>
           <div class="detail">
             <p></p>
             <iframe width:100%; class="instagram-media instagram-media-rendered" id="instagram-embed-0" src="https://www.instagram.com/p/Couq8uLB8bJ/embed/captioned/?cr=1&amp;v=14&amp;wp=675&amp;rd=https%3A%2F%2Ftaehoon.me&amp;rp=%2F#%7B%22ci%22%3A0%2C%22os%22%3A2231.2000000001863%2C%22ls%22%3A1235.7000000001863%2C%22le%22%3A2226.7000000001863%7D" height="650" allowtransparency="ture" allowfullscreen="true" frameborder="0"  data-instgrm-payload-id="instagram-media-payload-0" scrolling="no" style="background: white; max-width: 100%;  border-radius: 6px; border: 1px solid rgb(219, 219, 219); box-shadow: none; display: block; margin: 0px 0px 12px; min-width: auto; padding: 0px;" src="//www.instagram.com/embed.js" allow="autoplay; fullscreen;"></iframe>
           </div>
         </div>
       </div>
+
+      <!--
+      <div class="box">
+        <div class="card">
+          <div class="title" style="color:#E4405F">Instagram<div style="float:right;"><a class="btn btn-outline-danger" href="https://instagram.com/hun_0_4">Instagram Link</a></div></div>
+          <div class="detail">
+            <p></p>
+            <iframe width:100%; class="instagram-media instagram-media-rendered" id="instagram-embed-0" src="" height="650" allowtransparency="ture" allowfullscreen="true" frameborder="0"  data-instgrm-payload-id="instagram-media-payload-0" scrolling="no" style="background: white; max-width: 100%;  border-radius: 6px; border: 1px solid rgb(219, 219, 219); box-shadow: none; display: block; margin: 0px 0px 12px; min-width: auto; padding: 0px;" src="//www.instagram.com/embed.js" allow="autoplay; fullscreen;"></iframe>
+          </div>
+        </div>
+      </div>
+      -->
       
       <div class="box">
         <div class="card">
-          <div class="title">Spotify<div style="float:right;"><a class="btn btn-outline-success" href="https://open.spotify.com/user/a4oxxarp12239cwr97qap8if4?si=14365e7773474a15">Spotify Link</a></div></div>
+          <div class="title" style="color: #1DB954;">Spotify<div style="float:right;"><a class="btn btn-outline-success" href="https://open.spotify.com/user/a4oxxarp12239cwr97qap8if4?si=14365e7773474a15">Spotify Link</a></div></div>
           <div class="detail">
           <p></p>
           <iframe style="border-radius:12pm" src="https://open.spotify.com/embed/playlist/0sCxGBffQ7LvGSoToNQoLF?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
@@ -75,7 +110,36 @@
       
       <div class="box">
         <div class="card">
-          <div class="title">Github<div style="float:right;"><a class="btn btn-outline-dark" href="https://github.com/DeveloperTaehoon">Github Link</a></div></div>
+          <div class="title" style="color: #181717;">Github<div style="float:right;"><a class="btn btn-outline-dark" href="https://github.com/DeveloperTaehoon">Github Link</a></div></div>
+          <div class="detail">
+          <p></p>
+          </div>
+        </div>
+      </div>
+
+      <!--
+      <div class="box">
+        <div class="card">
+          <div class="title" style="color: #;">Shutterstock<div style="float:right;"><a class="btn btn-outline-danger" href="">Shutterstock Link</a></div></div>
+          <div class="detail">
+          <p></p>
+          </div>
+        </div>
+      </div>
+      -->
+
+      <div class="box">
+        <div class="card">
+          <div class="title" style="color: #1ED760;">Stats.fm<div style="float:right;"><a class="btn btn-outline-success" href="https://stats.fm/Taehoon">Stats.fm Link</a></div></div>
+          <div class="detail">
+          <p></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="card">
+          <div class="title" style="color: #1877F2;">Facebook<div style="float:right;"><a class="btn btn-outline-primary" href="https://www.facebook.com/profile.php?id=100011303383495&mibextid=LQQJ4d">Facebook Link</a></div></div>
           <div class="detail">
           <p></p>
           </div>
@@ -90,12 +154,14 @@
   <footer class="footer text-center">
     <div class="container" style="clear: both;>
       <p class="text-muted mb-0 small">
+        Email <a href="mailto:taehoon@taehoon.me">taehoon@taehoon.me</a><br>
         created by
-        <a href="https://taehoon.me/social.html">Taehoon</a>
+        <a href="https://twitter.com/hun0_4">Taehoon</a>
         |
         <a href="https://about.taehoon.me">About</a>
         |
-        v.0.5.0(Beta)
+        v.0.7.0(Beta)
+        
       </p>
     </div>
   </footer>
