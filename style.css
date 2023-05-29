@@ -1,0 +1,46 @@
+html {
+  background-color: #;
+}
+
+.main{
+  display: flex;
+  -webkit-box-pack: center;
+  justify-content: center;
+  background-color: #;
+}
+
+.contant{
+  max-width: 50rem;
+  width: 100%;
+  border-style: hiden;
+}
+
+.box{
+  border-top-width: 1px;
+  border-style: none;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+} 
+
+.card{
+    border-radius: 0.5rem;
+    margin-top: 0px;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+   
+}
+
+.title{
+  font-size: 27px;
+  font-weight: bold;
+}
+
+.detail{
+  font-size: 16px;
+  line-height: 2;
+  letter-spacing: 1px;
+}
