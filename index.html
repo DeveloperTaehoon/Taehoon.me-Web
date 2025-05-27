@@ -13,23 +13,7 @@
   <link rel="stylesheet" href="static/berg.css">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
   <link href="style.css" rel="stylesheet" type="text/css">
-  <script>
-      expireDate = new Date  
-expireDate.setMonth(expireDate.getMonth()+1)
-            
-visitor = eval(cookieVal("pageHit"))  /// 방문 카운트 변수이며 cookieVal 함수를 실행시킵니다.   /// 방문 카운트를 1 높입니다. 
-    visitor++
-document.cookie = "pageHit="+visitor+";expires=" + expireDate.toGMTString() /// 이곳에서 쿠키를 갱신합니다.   
-function cookieVal(cookieName) {  /// cookieVal 함수를 선언합니다.   
-   thisCookie = document.cookie.split("; ")  /// 쿠키의 문자열 구조가 '쿠키명=쿠키값; expires=유효기간' 이기 때문에 먼저 세미콜론(;)으로 나눕니다.(split) 
-   for (i=0; i<thisCookie.length; i++) { /// ; 으로 나눈 만큼 반복문을 실행합니다. 여기서는 2번을 반복합니다.   
-        if (cookieName == thisCookie[i].split("=")[0]) {  /// 먼저 thisCookie[i].split("=")[0]은 '쿠키명=쿠키값' 구조에서 =으로 나눈 배열의 첫번째 값을 지칭합니다. 즉, 쿠키명이 되겠습니다. 
-             return thisCookie[i].split("=")[1]  /// thisCookie[i].split("=")[1] 은 =으로 나눈 배열의 두번째 값, 즉, 쿠키값이 됩니다. 
-       }   
- }   
- return 0   
-}
-  </script>
+  <link rel="icon" href="/favicon.png" type="image/png" />
 </head>
 
 <body>
@@ -67,7 +51,7 @@ function cookieVal(cookieName) {  /// cookieVal 함수를 선언합니다.
       
       <div class="box">
         <div class="card">
-          <div class="title" style="color:#1DA1F2;">Twitter<div style="float:right;"><a class="btn btn-outline-info" href="https://x.com/realTaehoon">X Link</a></div></div>
+          <div class="title" >X (<span style="color:#1DA1F2;">Twitter</span>)<div style="float:right;"><a class="btn btn-outline-dark" href="https://twitter.com/hun0_4">X.com Link</a></div></div>
           <div class="detail">
           <blockquote class="twitter-tweet"><p lang="en" dir="ltr">I just installed <a href="https://twitter.com/hashtag/WordPress?src=hash&amp;ref_src=twsrc%5Etfw">#WordPress</a> on <a href="https://t.co/BLtCVU1nOo">https://t.co/BLtCVU1nOo</a> via <a href="https://twitter.com/hashtag/Softaculous?src=hash&amp;ref_src=twsrc%5Etfw">#Softaculous</a> <a href="https://twitter.com/hashtag/PHP?src=hash&amp;ref_src=twsrc%5Etfw">#PHP</a></p>&mdash; フン (@hun0_4) <a href="https://twitter.com/hun0_4/status/1603757185669832704?ref_src=twsrc%5Etfw">December 16, 2022</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
           </div>
@@ -109,15 +93,6 @@ function cookieVal(cookieName) {  /// cookieVal 함수를 선언합니다.
       <div class="box">
         <div class="card">
           <div class="title" style="color: #181717;">Github<div style="float:right;"><a class="btn btn-outline-dark" href="https://github.com/DeveloperTaehoon">Github Link</a></div></div>
-          <div class="detail">
-          <p></p>
-          </div>
-        </div>
-      </div>
-
-      <div class="box">
-        <div class="card">
-          <div class="title" style="color: #1877F2;">Facebook<div style="float:right;"><a class="btn btn-outline-primary" href="https://www.facebook.com/profile.php?id=100011303383495&mibextid=LQQJ4d">Facebook Link</a></div></div>
           <div class="detail">
           <p></p>
           </div>
