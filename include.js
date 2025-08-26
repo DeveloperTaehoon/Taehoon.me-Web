@@ -40,10 +40,18 @@ function loadHeaderFooter() {
         (Beta)
         
       </p>
+      <p>
+      © <span id="year"></span> Taehun’s Blog</
+      </p>
     </div>
   </footer>
   <!-- Footer End-->
   `;
+  
+  const yearEl = document.getElementById("year");
+  if (yearEl) {
+    yearEl.textContent = new Date().getFullYear();
+    }
 
   document.getElementById("header-placeholder").innerHTML = headerHTML;
   document.getElementById("footer-placeholder").innerHTML = footerHTML;
