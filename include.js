@@ -41,7 +41,7 @@ function loadHeaderFooter() {
         
       </p>
       <p>
-      © <span id="year"></span> Taehun’s Blog</
+      © 2022-<span id="year"></span> Taehoon
       </p>
     </div>
   </footer>
