@@ -26,33 +26,32 @@ function loadHeaderFooter() {
   `;
 
   const footerHTML = `
-    <!--Footer Start-->
+  <!--Footer Start-->
   <div class="container" style="clear: both; margin: 0px 0px 20px 0px;"></div>
   <footer class="footer text-center">
-    <div class="container" style="clear: both;>
+    <div class="container" style="clear: both;">
       <p class="text-muted mb-0 small">
-        Email <a href="mailto:taehoon@taehoon.me"></a><br>
+        Email <a href="mailto:taehoon@taehoon.me">taehoon@taehoon.me</a><br>
         created by
         <a href="https://x.com/realTaehoon">Taehoon</a>
         |
         <a href="about.html">About</a>
         |
         (Beta)
-        
       </p>
       <p>
-      © 2022-<span id="year"></span> Taehoon
+        © 2022-<span id="year"></span> Taehoon
       </p>
     </div>
   </footer>
   <!-- Footer End-->
-  `;
-  
-  const yearEl = document.getElementById("year");
-  if (yearEl) {
-    yearEl.textContent = new Date().getFullYear();
-    }
+`;
 
-  document.getElementById("header-placeholder").innerHTML = headerHTML;
-  document.getElementById("footer-placeholder").innerHTML = footerHTML;
+// footer 삽입
+document.getElementById("footer-placeholder").innerHTML = footerHTML;
+
+// 현재년도 가져와서 <span id="year">에 넣기
+const yearEl = document.getElementById("year");
+if (yearEl) {
+  yearEl.textContent = new Date().getFullYear();
 }
