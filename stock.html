@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>주식 전광판</title>
+  <style>
+    :root{
+      --bg:#0b0f14; --card:#0f1620; --text:#d6e2f0; --muted:#7b8a9a;
+      --up:#16c784; --down:#ea3943; --accent:#4aa6ff; --warn:#ffb020;
+    }
+    body.light{
+      --bg:#ffffff; --card:#f5f7fa; --text:#1a1a1a; --muted:#5c6b7a;
+      --up:#0a9d58; --down:#d93025; --accent:#1967d2; --warn:#ff9800;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Apple SD Gothic Neo,Noto Sans KR,Apple Color Emoji,Segoe UI Emoji}
+    header{position:sticky;top:0;background:linear-gradient(180deg,rgba(11,15,20,.95),rgba(11,15,20,.65));backdrop-filter:blur(6px);z-index:2}
+    body.light header{background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(255,255,255,.65))}
+    .wrap{max-width:1200px;margin:0 auto;padding:16px}
+    h1{margin:0 0 6px;font-size:22px;font-weight:700}
+    .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    input,button,select{background:var(--card);border:1px solid #1e2a36;color:var(--text);border-radius:12px;padding:10px 12px;font-size:14px}
+    body.light input,body.light button,body.light select{border:1px solid #d0d7de}
+    button{cursor:pointer}
+    button.primary{background:var(--accent);border-color:transparent;color:#fff}
+    .grid{display:grid;grid-template-columns:1.2fr .9fr .9fr 1.2fr .8fr;gap:8px;margin-top:12px}
+    .head,.row{background:var(--card);border:1px solid #1e2a36;border-radius:14px;display:contents}
+    body.light .head,body.light .row{border:1px solid #d0d7de}
+    .cell{padding:12px 12px;border-radius:14px;background:var(--card);border:1px solid #1e2a36}
+    body.light .cell{border:1px solid #d0d7de}
+    .head .cell{font-weight:700;color:var(--muted);text-transform:uppercase;font-size:12px}
+    .row .cell.symbol{font-weight:700;letter-spacing:.2px;display:flex;justify-content:space-between;align-items:center}
+    .chip{font-size:12px;padding:4px 8px;border-radius:999px;border:1px solid #263545;color:var(--muted)}
+    body.light .chip{border:1px solid #d0d7de}
+    .price{font-variant-numeric:tabular-nums}
+    .chg.up{color:var(--up)}
+    .chg.down{color:var(--down)}
+    .blink{animation:blink .6s ease-in-out 2}
+    @keyframes blink{50%{filter:brightness(1.7)}}
+    .spark{width:100%;height:32px}
+    .footer{color:var(--muted);font-size:12px;padding:12px 0 20px}
+    .scroller{white-space:nowrap;overflow:hidden;border-top:1px solid #1e2a36;border-bottom:1px solid #1e2a36}
+    body.light .scroller{border-top:1px solid #d0d7de;border-bottom:1px solid #d0d7de}
+    .scroller .inner{display:inline-block;padding:8px 0;animation:marquee 30s linear infinite}
+    @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+    .tag{display:inline-flex;gap:6px;align-items:center;margin-right:18px}
+    .tag .val{font-variant-numeric:tabular-nums}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>주식 전광판</h1>
+      <div class="controls">
+        <input id="symbolInput" placeholder="심볼 추가 (예: AAPL, TSLA, 005930.KS)" />
+        <button class="primary" id="addBtn">추가</button>
+        <input id="filterInput" placeholder="필터 (심볼/이름)" />
+        <select id="sortSelect">
+          <option value="symbol">정렬: 심볼</option>
+          <option value="price">정렬: 가격</option>
+          <option value="percent">정렬: 등락률</option>
+          <option value="volume">정렬: 거래량</option>
+          <option value="time">정렬: 시간</option>
+        </select>
+        <button id="saveBtn">목록 저장</button>
+        <button id="themeBtn">라이트/다크</button>
+        <span class="chip" id="status">연결 준비</span>
+      </div>
+      <div class="scroller"><div class="inner" id="tape"></div></div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="grid" id="table">
+      <div class="head">
+        <div class="cell">심볼</div>
+        <div class="cell">이름</div>
+        <div class="cell">가격</div>
+        <div class="cell">52주 범위</div>
+        <div class="cell">등락률</div>
+      </div>
+    </div>
+    <div class="footer">Polygon.io 키를 넣으면 실데이터로 연결됩니다.</div>
+  </main>
+
+  <script>
+    const MOCK = false; // 실데이터 사용
+    const POLYGON_KEY = "0hJ1AvEYlcNWUkkwphe4KEA7cBcxn3Zt"; // 👉 여기에 키를 넣으면 됨
+
+    const symbolsDefault = [
+      {symbol: 'AAPL', name:'Apple Inc.'},
+      {symbol: 'TSLA', name:'Tesla, Inc.'},
+      {symbol: 'NVDA', name:'NVIDIA Corp.'},
+      {symbol: 'MSFT', name:'Microsoft Corp.'},
+      {symbol: 'AMZN', name:'Amazon.com, Inc.'}
+    ];
+
+    const state = {
+      symbols: JSON.parse(localStorage.getItem('ticker.symbols')||'null') || symbolsDefault,
+      quotes: {},
+      history: {},
+      connected:false
+    };
+
+    const el = sel => document.querySelector(sel);
+    const tape = el('#tape');
+    const table = el('#table');
+    const status = el('#status');
+
+    function fmt(n, d=2){
+      if(n==null||isNaN(n)) return '-';
+      return Number(n).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
+    }
+    function clamp(v,min,max){return Math.max(min,Math.min(max,v))}
+
+    function upsertRow(q){
+      const id = `row-${q.symbol}`;
+      let row = document.getElementById(id);
+      const chg = q.changePercent ?? 0;
+      const dir = chg>=0?'up':'down';
+      const range = (q.low52 && q.high52)? `${fmt(q.low52,2)} ~ ${fmt(q.high52,2)}` : '-';
+
+      if(!row){
+        row = document.createElement('div');
+        row.className='row';
+        row.id=id;
+        row.innerHTML = `
+          <div class="cell symbol"><span>${q.symbol}</span><button data-remove="${q.symbol}">✕</button></div>
+          <div class="cell name">${q.name||''}</div>
+          <div class="cell price price-${q.symbol}">-</div>
+          <div class="cell"><canvas class="spark" id="spark-${q.symbol}"></canvas><div class="range">${range}</div></div>
+          <div class="cell chg chg-${q.symbol}">-</div>
+        `;
+        table.appendChild(row);
+      }
+
+      const priceEl = row.querySelector(`.price-${q.symbol}`);
+      const chgEl = row.querySelector(`.chg-${q.symbol}`);
+      priceEl.textContent = fmt(q.price, q.price>100?2:3);
+      chgEl.textContent = `${fmt(chg*100,2)}%`;
+      chgEl.classList.remove('up','down');
+      chgEl.classList.add(dir);
+      priceEl.classList.add('blink');
+      setTimeout(()=>priceEl.classList.remove('blink'),350);
+
+      drawSpark(`spark-${q.symbol}`, q.symbol);
+    }
+
+    function drawSpark(canvasId, symbol){
+      const cvs = document.getElementById(canvasId);
+      if(!cvs) return;
+      const ctx = cvs.getContext('2d');
+      const w = cvs.width = cvs.clientWidth * devicePixelRatio;
+      const h = cvs.height = cvs.clientHeight * devicePixelRatio;
+      ctx.clearRect(0,0,w,h);
+      const arr = state.history[symbol]||[];
+      if(arr.length<2) return;
+      const min = Math.min(...arr), max = Math.max(...arr);
+      ctx.lineWidth = 2 * devicePixelRatio;
+      ctx.beginPath();
+      arr.forEach((p,i)=>{
+        const x = (i/(arr.length-1))*w;
+        const y = h - ((p-min)/(max-min||1))*h;
+        if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      });
+      const last = arr[arr.length-1];
+      const first = arr[0];
+      ctx.strokeStyle = (last>=first? '#16c784' : '#ea3943');
+      ctx.stroke();
+    }
+
+    function renderTape(){
+      const items = Object.values(state.quotes)
+        .sort((a,b)=>a.symbol.localeCompare(b.symbol))
+        .map(q=>{
+          const pct = ((q.changePercent??0)*100).toFixed(2);
+          const cls = (q.changePercent??0)>=0? 'up':'down';
+          return `<span class="tag"><span>${q.symbol}</span><span class="val ${cls}">${fmt(q.price)} (${pct}%)</span></span>`
+        }).join(' ');
+      tape.innerHTML = items + ' ' + items;
+    }
+
+    function sortRows(by){
+      const rows = [...table.querySelectorAll('.row')];
+      const getVal = (row)=>{
+        const sym = row.id.replace('row-','');
+        const q = state.quotes[sym]||{};
+        switch(by){
+          case 'price': return q.price??-Infinity;
+          case 'percent': return q.changePercent??-Infinity;
+          case 'volume': return q.volume??-Infinity;
+          case 'time': return q.ts??0;
+          default: return sym;
+        }
+      };
+      rows.sort((a,b)=>{
+        const va = getVal(a), vb = getVal(b);
+        if(typeof va === 'string') return va.localeCompare(vb);
+        return vb - va;
+      }).forEach(r=>table.appendChild(r));
+    }
+
+    function handleQuote(q){
+      const sym = q.symbol;
+      const prev = state.quotes[sym]||{};
+      const name = prev.name || (state.symbols.find(s=>s.symbol===sym)?.name) || '';
+      const price = Number(q.price ?? prev.price ?? 0);
+      const low52 = q.low52 ?? prev.low52;
+      const high52 = q.high52 ?? prev.high52;
+      const changePercent = (q.changePercent!=null)? q.changePercent : (
+        prev.price? (price - prev.price) / prev.price : 0
+      );
+      const volume = q.volume ?? prev.volume;
+      const ts = q.ts ?? Date.now();
+
+      state.quotes[sym] = {symbol:sym,name,price,low52,high52,changePercent,volume,ts};
+      const hist = state.history[sym] || (state.history[sym]=[]);
+      hist.push(price); if(hist.length>60) hist.shift();
+      upsertRow(state.quotes[sym]);
+      renderTape();
+      sortRows(el('#sortSelect').value);
+    }
+
+    function connectPolygon(){
+      const ws = new WebSocket(`wss://socket.polygon.io/stocks`);
+      ws.addEventListener('open', ()=>{
+        ws.send(JSON.stringify({action:'auth', params: POLYGON_KEY}));
+        state.symbols.forEach(s=>{
+          ws.send(JSON.stringify({action:'subscribe', params:`T.${s.symbol}`}));
+        });
+        status.textContent = '연결됨';
+      });
+      ws.addEventListener('message',(msg)=>{
+        const data = JSON.parse(msg.data);
+        data.forEach(ev=>{
+          if(ev.ev === 'T'){ // trade tick
+            handleQuote({symbol: ev.sym, price: ev.p, ts: ev.t});
+          }
+        });
+      });
+    }
+
+    el('#addBtn').addEventListener('click',()=>{
+      const v = el('#symbolInput').value.trim().toUpperCase();
+      if(!v) return;
+      if(state.symbols.some(s=>s.symbol===v)) return alert('이미 추가된 심볼입니다');
+      state.symbols.push({symbol:v,name:''});
+      localStorage.setItem('ticker.symbols', JSON.stringify(state.symbols));
+      handleQuote({symbol:v, price: Math.random()*200+20, changePercent:0});
+      el('#symbolInput').value='';
+    });
+
+    el('#saveBtn').addEventListener('click',()=>{
+      localStorage.setItem('ticker.symbols', JSON.stringify(state.symbols));
+      alert('목록을 저장했습니다');
+    });
+
+    el('#themeBtn').addEventListener('click',()=>{
+      document.body.classList.toggle('light');
+    });
+
+    table.addEventListener('click',(e)=>{
+      const sym = e.target?.dataset?.remove;
+      if(!sym) return;
+      state.symbols = state.symbols.filter(s=>s.symbol!==sym);
+      localStorage.setItem('ticker.symbols', JSON.stringify(state.symbols));
+      const row = document.getElementById('row-'+sym);
+      if(row) row.remove();
+      delete state.quotes[sym];
+      renderTape();
+    });
+
+    el('#filterInput').addEventListener('input',(e)=>{
+      const q = e.target.value.toLowerCase();
+      [...document.querySelectorAll('.row')].forEach(r=>{
+        const sym = r.querySelector('.symbol').textContent.toLowerCase();
+        const name = r.querySelector('.name').textContent.toLowerCase();
+        r.style.display = (sym.includes(q)||name.includes(q))? 'contents':'none';
+      });
+    });
+
+    el('#sortSelect').addEventListener('change', (e)=> sortRows(e.target.value));
+
+    if(MOCK){
+      console.log("모의데이터 모드");
+    } else {
+      connectPolygon();
+    }
+  </script>
+</body>
+</html>
