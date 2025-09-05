@@ -55,3 +55,7 @@ const yearEl = document.getElementById("year");
 if (yearEl) {
   yearEl.textContent = new Date().getFullYear();
 }
+
+  document.getElementById("header-placeholder").innerHTML = headerHTML;
+  document.getElementById("footer-placeholder").innerHTML = footerHTML;
+}
