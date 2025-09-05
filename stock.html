@@ -88,6 +88,83 @@
     const MOCK = false; // 실데이터 사용
     const POLYGON_KEY = "0hJ1AvEYlcNWUkkwphe4KEA7cBcxn3Zt"; // 👉 여기에 키를 넣으면 됨
 
+    const API_KEY = "0hJ1AvEYlcNWUkkwphe4KEA7cBcxn3Zt"; // ← 본인 키 입력
+const USE_WS = false; // 무료 계정이면 false, 유료면 true
+
+// REST API (무료 계정용)
+async function fetchQuote(symbol){
+  const url = `https://api.polygon.io/v2/last/trade/${symbol}?apiKey=${API_KEY}`;
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    if(data && data.results){
+      const q = data.results;
+      handleQuote({
+        symbol,
+        price: q.p,
+        ts: q.t,
+        volume: q.s
+      });
+    }
+  } catch(e){
+    console.error("API 에러", e);
+  }
+}
+
+function startPolling(){
+  state.symbols.forEach(s=>fetchQuote(s.symbol)); // 최초 1회
+  setInterval(()=>{
+    state.symbols.forEach(s=>fetchQuote(s.symbol));
+  }, 5000); // 5초마다 호출
+}
+
+// WebSocket (유료 계정용)
+function connectPolygon(symbols){
+  const ws = new WebSocket("wss://socket.polygon.io/stocks");
+
+  ws.onopen = () => {
+    console.log("🔌 연결됨");
+    status.textContent = "Polygon 연결됨";
+    ws.send(JSON.stringify({ action:"auth", params: API_KEY }));
+    const channels = symbols.map(s=>"T."+s.symbol).join(",");
+    ws.send(JSON.stringify({ action:"subscribe", params: channels }));
+  };
+
+  ws.onmessage = (msg) => {
+    const data = JSON.parse(msg.data);
+    data.forEach(ev=>{
+      if(ev.ev === "T"){
+        handleQuote({
+          symbol: ev.sym,
+          price: ev.p,
+          volume: ev.s,
+          ts: ev.t
+        });
+      }
+    });
+  };
+
+  ws.onerror = (err)=>{
+    console.error("WS 에러:", err);
+    status.textContent = "연결 에러";
+  };
+  ws.onclose = ()=>{
+    console.warn("WS 연결 종료");
+    status.textContent = "연결 종료";
+  };
+}
+
+// 실행 구분
+if(MOCK){
+  mockFeed(state.symbols);
+}else{
+  if(USE_WS){
+    connectPolygon(state.symbols);
+  }else{
+    startPolling();
+  }
+}
+
     const symbolsDefault = [
       {symbol: 'AAPL', name:'Apple Inc.'},
       {symbol: 'TSLA', name:'Tesla, Inc.'},
