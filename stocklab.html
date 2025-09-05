@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>주식 전광판</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0; padding: 0;
+      background: var(--bg); color: var(--text);
+      transition: background 0.3s, color 0.3s;
+    }
+    :root {
+      --bg: #121212; --text: #f0f0f0;
+      --card-bg: #1e1e1e; --border: #333;
+    }
+    .light {
+      --bg: #ffffff; --text: #000000;
+      --card-bg: #f5f5f5; --border: #ccc;
+    }
+    header {
+      padding: 1rem; display: flex;
+      justify-content: space-between; align-items: center;
+      background: var(--card-bg);
+    }
+    .controls { display: flex; gap: 0.5rem; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td {
+      padding: 0.5rem; text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    tr[draggable="true"] { cursor: grab; }
+    tr.dragging { opacity: 0.5; }
+    .delete-btn {
+      cursor: pointer; margin-left: 0.5rem;
+      color: crimson; font-weight: bold;
+    }
+    .footer { text-align: center; padding: 0.5rem; font-size: 0.85rem; }
+    button { padding: 0.4rem 0.8rem; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <h2>📈 주식 전광판</h2>
+    <div class="controls">
+      <input type="text" id="symbolInput" placeholder="심볼 입력 (예: AAPL)">
+      <button onclick="addSymbol()">추가</button>
+      <button onclick="toggleTheme()">테마 전환</button>
+    </div>
+  </header>
+  <main>
+    <table>
+      <thead>
+        <tr>
+          <th>심볼</th>
+          <th>가격</th>
+          <th>변동</th>
+        </tr>
+      </thead>
+      <tbody id="stock-list"></tbody>
+    </table>
+    <div class="footer">무료 Polygon.io API 키를 사용한 REST 폴링 데모</div>
+  </main>
+
+<script>
+const API_KEY = "YOUR_API_KEY_HERE";  // 🔑 본인 키 입력
+const USE_WS = false; // 무료 계정 → false 유지
+const POLL_INTERVAL = 5000;
+
+let symbols = [];
+let stocks = {};
+let theme = localStorage.getItem("theme") || "dark";
+document.body.classList.toggle("light", theme === "light");
+
+// ✅ 저장/불러오기
+function saveSymbols() {
+  localStorage.setItem("symbols", JSON.stringify(symbols));
+}
+function loadSymbols() {
+  const saved = localStorage.getItem("symbols");
+  if (saved) {
+    symbols = JSON.parse(saved);
+  } else {
+    symbols = ["AAPL", "MSFT"]; // 기본값
+  }
+}
+
+// ✅ 심볼 추가
+function addSymbol() {
+  const input = document.getElementById("symbolInput");
+  const sym = input.value.trim().toUpperCase();
+  if (sym && !symbols.includes(sym)) {
+    symbols.push(sym);
+    stocks[sym] = { price: 0, change: 0 };
+    saveSymbols();
+    renderStockList();
+  }
+  input.value = "";
+}
+
+// ✅ 심볼 삭제
+function removeSymbol(sym) {
+  symbols = symbols.filter(s => s !== sym);
+  delete stocks[sym];
+  saveSymbols();
+  renderStockList();
+}
+
+// ✅ UI 렌더링
+function renderStockList() {
+  const tbody = document.getElementById("stock-list");
+  tbody.innerHTML = "";
+  symbols.forEach(sym => {
+    const { price, change } = stocks[sym] || {};
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${sym}<span class="delete-btn" onclick="removeSymbol('${sym}')">❌</span></td>
+      <td>${price ? price.toFixed(2) : "-"}</td>
+      <td style="color:${change>0?"lime":"crimson"}">
+        ${change ? change.toFixed(2) : "-"}
+      </td>`;
+    tbody.appendChild(row);
+  });
+  enableRowDragging();
+}
+
+// ✅ Drag & Drop 순서 변경
+function enableRowDragging() {
+  const tbody = document.getElementById("stock-list");
+  let dragSrcRow = null;
+
+  tbody.querySelectorAll("tr").forEach((row) => {
+    row.draggable = true;
+
+    row.addEventListener("dragstart", e => {
+      dragSrcRow = row;
+      row.classList.add("dragging");
+    });
+
+    row.addEventListener("dragend", e => {
+      row.classList.remove("dragging");
+    });
+
+    row.addEventListener("dragover", e => {
+      e.preventDefault();
+      const draggingRow = dragSrcRow;
+      if (!draggingRow || draggingRow === row) return;
+
+      const rows = Array.from(tbody.querySelectorAll("tr"));
+      const srcIndex = rows.indexOf(draggingRow);
+      const targetIndex = rows.indexOf(row);
+
+      if (srcIndex < targetIndex) {
+        tbody.insertBefore(draggingRow, row.nextSibling);
+      } else {
+        tbody.insertBefore(draggingRow, row);
+      }
+      // ⚡️ 순서 배열도 업데이트 + 저장
+      symbols = Array.from(tbody.querySelectorAll("tr")).map(r => r.firstChild.textContent.replace("❌","").trim());
+      saveSymbols();
+    });
+  });
+}
+
+// ✅ 테마 토글
+function toggleTheme() {
+  document.body.classList.toggle("light");
+  theme = document.body.classList.contains("light") ? "light" : "dark";
+  localStorage.setItem("theme", theme);
+}
+
+// ✅ REST 폴링
+async function fetchQuote(sym) {
+  try {
+    const res = await fetch(`https://api.polygon.io/v2/last/trade/${sym}?apiKey=${API_KEY}`);
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data && data.results) {
+      const p = data.results.p;
+      const prev = stocks[sym]?.price || p;
+      stocks[sym] = { price: p, change: p - prev };
+    }
+  } catch(e) { console.error(e); }
+}
+
+async function pollQuotes() {
+  for (const sym of symbols) {
+    await fetchQuote(sym);
+  }
+  renderStockList();
+}
+setInterval(pollQuotes, POLL_INTERVAL);
+
+// ✅ 시작
+loadSymbols();
+renderStockList();
+pollQuotes();
+</script>
+</body>
+</html>
