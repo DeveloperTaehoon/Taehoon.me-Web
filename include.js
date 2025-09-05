@@ -47,8 +47,10 @@ function loadHeaderFooter() {
   <!-- Footer End-->
 `;
 
-// footer 삽입
-document.getElementById("footer-placeholder").innerHTML = footerHTML;
+  document.getElementById("header-placeholder").innerHTML = headerHTML;
+  document.getElementById("footer-placeholder").innerHTML = footerHTML;
+}
+
 
 // 현재년도 가져와서 <span id="year">에 넣기
 const yearEl = document.getElementById("year");
@@ -56,6 +58,4 @@ if (yearEl) {
   yearEl.textContent = new Date().getFullYear();
 }
 
-  document.getElementById("header-placeholder").innerHTML = headerHTML;
-  document.getElementById("footer-placeholder").innerHTML = footerHTML;
-}
+ 
